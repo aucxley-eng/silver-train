@@ -36,19 +36,19 @@ db.session.expire(obj)	    obj:        model instance	Mark object as stale — n
 
 
 Query: Every query method with parameters
-Method	            Returns	Use when
+Method	            Returns	          Use when
 
-.all()	            list	You want every matching row
-.first()	        object or None	You want the first match — safe, never raises
-.one()	            object	Exactly one result expected — raises if 0 or 2+
-.one_or_none()	    object or None	Zero or one expected — raises only if 2+
-.count()	        int	You just need the number — no objects loaded
-.filter_by(**kwargs)Query	Exact equality filters — simple and readable
-.filter(*criteria)	Query	Comparisons, LIKE, IN, OR, complex logic
-.order_by(*cols)	Query	Sort results — chain desc() for descending
-.limit(n)	        Query	Cap result count — always combine with order_by
-.offset(n)	        Query	Skip n rows — combine with limit for pagination
-.get(id)	        object or None	Fetch by primary key — checks identity map first
+.all()	            list	          You want every matching row
+.first()	        object or None	  You want the first match — safe, never raises
+.one()	            object	Exactly   one result expected — raises if 0 or 2+
+.one_or_none()	    object or None	  Zero or one expected — raises only if 2+
+.count()	        int	              You just need the number — no objects loaded
+.filter_by(**kwargs)Query	          Exact equality filters — simple and readable
+.filter(*criteria)	Query	          Comparisons, LIKE, IN, OR, complex logic
+.order_by(*cols)	Query	          Sort results — chain desc() for descending
+.limit(n)	        Query	          Cap result count — always combine with order_by
+.offset(n)	        Query	          Skip n rows — combine with limit for pagination
+.get(id)	        object or None	  Fetch by primary key — checks identity map first
 
 
 
@@ -58,32 +58,32 @@ Marshmallow ( is your contract with the outside world)
     => Deserilization of json to python obj
 
 
-Every field type
-Field	        Python type	Validates
+Every field type:
+Field	            Python type	Validates
 
-fields.Str()	str	String — most common
-fields.Int()	int	Integer
-fields.Float()	float	Decimal number
-fields.Decimal()	Decimal	Exact decimal — use for money
-fields.Bool()	bool	True/False
-fields.DateTime()	datetime	ISO 8601 datetime string
-fields.Date()	date	ISO 8601 date string
-fields.Email()	str	String + valid email format
-fields.URL()	str	String + valid URL format
-fields.UUID()	UUID	Valid UUID format
-fields.List(inner)	list	List where each item matches inner field
+fields.Str()	        str	String — most common
+fields.Int()	        int	Integer
+fields.Float()	        float	Decimal number
+fields.Decimal()	    Decimal	Exact decimal — use for money
+fields.Bool()	        bool	True/False
+fields.DateTime()	    datetime	ISO 8601 datetime string
+fields.Date()	        date	ISO 8601 date string
+fields.Email()	        str	String + valid email format
+fields.URL()	        str	String + valid URL format
+fields.UUID()	        UUID	Valid UUID format
+fields.List(inner)	    list	List where each item matches inner field
 fields.Nested(schema)	dict	Embedded object validated against another schema
 fields.Dict()	dict	Arbitrary key-value pairs
 
-Universal field parameters — apply to every field type
+Universal field parameters — apply to every field type:
 Parameter	    Type	        What it does
 
-required	    bool	        True = error if field missing from load() input
-dump_only	    bool	        True = appears in responses, silently ignored on input. Use for id, timestamps.
-load_only	    bool	        True = accepted in requests, never in responses. Use for passwords.
-allow_none	    bool	        True = null/None is valid. Default False.
+required	    bool	            True = error if field missing from load() input
+dump_only	    bool	            True = appears in responses, silently ignored on input. Use for id, timestamps.
+load_only	    bool	            True = accepted in requests, never in responses. Use for passwords.
+allow_none	    bool	            True = null/None is valid. Default False.
 validate	    callable or list	Validator function(s) to run after type check
-load_default	any	Value       used when field is missing from load() input
-dump_default	any	Value       used when attribute is None during dump()
-data_key	    str	JSON        key name when it differs from Python attribute name
-metadata	    dict	        Extra info — used by OpenAPI/Swagger documentation generators
+load_default	any	Value           used when field is missing from load() input
+dump_default	any	Value           used when attribute is None during dump()
+data_key	    str	JSON            key name when it differs from Python attribute name
+metadata	    dict	            Extra info — used by OpenAPI/Swagger documentation generators

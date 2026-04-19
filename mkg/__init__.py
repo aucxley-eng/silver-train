@@ -1,32 +1,34 @@
-# FLASK factory 
+import os
 from flask import Flask
-from extensions import db, seriliazer, mig, json_token
+ 
+from config import config_map
+from extensions import db, seriliazer, migrate, limiter
+# from app.errors import register_error_handlers
 
-JWT_SECRET_KEY = "paste-64-char-secret-here-paste-64-char-secret-here-paste-64-char-secret-here"
-JWT_ACCESS_TOKEN_EXPIRES = 300 # 5 min
-JWT_REFRESH_TOKEN_EXPIRES = 900 # 15 min
 
+def create_app_for_developemnt(env):
 
-def create_app_for_developemnt():
+    env = env or os.getenv("FLASK_ENV", "development")
     MKG = Flask(__name__)
-    MKG.config.from_object("config.Config")
+    MKG.config.from_object(config_map[env])
 
     db.init_app(MKG)
     seriliazer.init_app(MKG)
-    mig.init_app(MKG)
-    json_token.init_app(MKG)
+    migrate.init_app(MKG, db)
+    limiter.init_app(MKG)
 
     # register the model(tables) for sql_alchemy to see them
-    from mkg.auth.models.auth_domain import Members
+    with MKG.app_context():
+        from mkg.auth.auth_models.domain_entity.auth_domain          import Member
 
-    from mkg.authors_app.models.author_domain import Author
-    from mkg.books_app.models.book_domain import Book
+        from mkg.authors_app.models.author_domain                    import Author
+        from mkg.books_app.models.book_domain                        import Book
 
     # register the blueprints(endpoints)
-    from mkg.authors_app.controllers.authors_routes import author_app
+    from mkg.authors_app.controllers.authors_routes                  import author_app
     MKG.register_blueprint(author_app)
 
-    from mkg.auth.controllers.auth_routes import auth_app
-    MKG.register_blueprint(auth_app)
+    from mkg.auth.auth_controllers.routes                            import auth_bp
+    MKG.register_blueprint(auth_bp)
     
     return MKG
